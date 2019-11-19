@@ -5,17 +5,17 @@ import numpy as np
 random.seed(1234)
 
 with open('../raw_data/reviews.pkl', 'rb') as f:
-  reviews_df = pickle.load(f)
-  reviews_df = reviews_df[['reviewerID', 'asin', 'unixReviewTime']]
+  reviews_df = pickle.load(f)         #dump将对象保存到文件中去，file有write（）接口，load将文件解析成对象，文件有read（）、readline（）接口
+  reviews_df = reviews_df[['reviewerID', 'asin', 'unixReviewTime']]       #reviews_df有评论者ID，商品ID，评论时间
 with open('../raw_data/meta.pkl', 'rb') as f:
   meta_df = pickle.load(f)
-  meta_df = meta_df[['asin', 'categories']]
-  meta_df['categories'] = meta_df['categories'].map(lambda x: x[-1][-1])
+  meta_df = meta_df[['asin', 'categories']]  #商品ID，商品类别
+  meta_df['categories'] = meta_df['categories'].map(lambda x: x[-1][-1])#此时lambda函数用于指定对列表中每一个元素的共同操作。例如map(lambda x: x+1, [1, 2,3])将列表[1, 2, 3]中的元素分别加1，其结果[2, 3, 4]。
 
 
 def build_map(df, col_name):
-  key = sorted(df[col_name].unique().tolist())
-  m = dict(zip(key, range(len(key))))
+  key = sorted(df[col_name].unique().tolist())  #sort()排序，tolist()将数组转化成列表
+  m = dict(zip(key, range(len(key)))) #dict(zip(keys,values))将两个列表转化成一个字典d={k1:v1,k2:v2...}
   df[col_name] = df[col_name].map(lambda x: m[x])
   return m, key
 
